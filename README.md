@@ -5,14 +5,14 @@
 > 이 저장소는 워크숍/스터디에서 "이거 어떻게 만들었어요?"라는 질문에 답하기 위해 공개한 **정제본**입니다.
 > 토큰·API 키 등 모든 시크릿은 환경변수로 분리되어 있고, 실제 워크스페이스 ID·개인정보는 제거했습니다.
 
-## 📘 직접 만들어보고 싶다면 → [`guide/AGENT-BUILD-GUIDE.md`](./guide/AGENT-BUILD-GUIDE.md)
+## 직접 만들어보기 — AI에게 시키세요
 
-코딩을 몰라도 됩니다. **AI에게 통째로 던지는 빌드 가이드**를 따라, 클로드 코드 같은 코딩 에이전트(🤖)나 브라우저 LLM(💬)과 **페이즈 단위로** 이 자동화를 함께 만듭니다.
+코딩을 몰라도 됩니다. 본인 상황에 맞게 **둘 중 하나만** 하면, 그다음은 AI가 페이즈 단위로 안내합니다.
 
-- [`guide/AGENT-BUILD-GUIDE.md`](./guide/AGENT-BUILD-GUIDE.md) — 분기 안내 · 프로젝트 스펙 · 페이즈 0~6 · 핸드오프 프로토콜
-- [`guide/README.md`](./guide/) — 가이드 폴더 안내(짧은 시작점)
-
-> (참고: [`WORKFLOW.md`](./WORKFLOW.md)는 원본 워크숍 발표자용 메모입니다. 처음이라면 위 가이드부터 보세요.)
+- **🤖 코딩 에이전트가 있다면** (클로드 코드·Cursor·Codex·Antigravity CLI 등)
+  → **이 저장소를 에이전트에게 읽히고** *"`guide/AGENT-BUILD-GUIDE.md`대로 페이즈 0부터 만들자"* 라고 하세요.
+- **💬 브라우저 챗봇만 있다면** (ChatGPT·Claude·Gemini 등)
+  → [`guide/AGENT-BUILD-GUIDE.md`](./guide/AGENT-BUILD-GUIDE.md) **이 한 파일만 복사해 붙여넣고** *"페이즈 0 시작"* 이라고 하세요.
 
 ---
 
