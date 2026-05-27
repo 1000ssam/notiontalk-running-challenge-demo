@@ -5,16 +5,14 @@
 > 이 저장소는 워크숍/스터디에서 "이거 어떻게 만들었어요?"라는 질문에 답하기 위해 공개한 **정제본**입니다.
 > 토큰·API 키 등 모든 시크릿은 환경변수로 분리되어 있고, 실제 워크스페이스 ID·개인정보는 제거했습니다.
 
-## 📘 직접 만들어보고 싶다면 → [`guide/`](./guide/) 가이드북부터
+## 📘 직접 만들어보고 싶다면 → [`guide/AGENT-BUILD-GUIDE.md`](./guide/AGENT-BUILD-GUIDE.md)
 
-코딩을 몰라도, **클로드 코드에게 한국어로 부탁하며** 이 자동화를 직접 만들어볼 수 있게 단계별로 풀었습니다.
+코딩을 몰라도 됩니다. **AI에게 통째로 던지는 빌드 가이드**를 따라, 클로드 코드 같은 코딩 에이전트(🤖)나 브라우저 LLM(💬)과 **페이즈 단위로** 이 자동화를 함께 만듭니다.
 
-- [`guide/README.md`](./guide/README.md) — 시작점(대상·준비물·읽는 순서)
-- [`guide/01-concepts.md`](./guide/01-concepts.md) — 개념을 비유로
-- [`guide/02-workflow.md`](./guide/02-workflow.md) — 부품들이 어떻게 연결되나
-- [`guide/03-tutorial.md`](./guide/03-tutorial.md) — 빈 폴더에서 배포까지 따라하기
+- [`guide/AGENT-BUILD-GUIDE.md`](./guide/AGENT-BUILD-GUIDE.md) — 분기 안내 · 프로젝트 스펙 · 페이즈 0~6 · 핸드오프 프로토콜
+- [`guide/README.md`](./guide/) — 가이드 폴더 안내(짧은 시작점)
 
-> (참고: [`WORKFLOW.md`](./WORKFLOW.md)는 원본 워크숍 발표자용 메모입니다. 처음이라면 위 `guide/`부터 보세요.)
+> (참고: [`WORKFLOW.md`](./WORKFLOW.md)는 원본 워크숍 발표자용 메모입니다. 처음이라면 위 가이드부터 보세요.)
 
 ---
 
