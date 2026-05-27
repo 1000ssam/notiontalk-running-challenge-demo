@@ -126,49 +126,24 @@ running-challenge/
 
 ---
 
-## STEP 4 · 가장 까다로운 한 곳 — 데이터소스 ID 찾기
+## STEP 4 · 데이터소스 ID 넣기 (노션 화면에서 복사)
 
-> 솔직히 말씀드리면, **여기가 (B) 길에서 제일 번거롭습니다.** 노션은 표마다 "데이터소스 ID"라는 게 있는데, 이건 노션 화면 URL에는 안 보이고 **한 번 조회**해야 알 수 있습니다. (A) 길에서는 코딩 에이전트가 이걸 자동으로 읽어옵니다. (B) 길에서는 아래처럼 **임시 도우미 페이지**를 잠깐 띄워서 알아냅니다.
+노션 표마다 "데이터소스 ID"라는 게 있습니다. URL에는 안 보이지만, **노션 화면에서 클릭 몇 번으로 바로 복사**할 수 있어요.
 
-**4-1. 도우미 파일을 잠깐 추가** — 깃허브 리포에서 `api/find-ids.js`를 새로 만들어(Add file → Create new file → 이름 `api/find-ids.js`) 아래를 붙여넣고 Commit:
+**4-1. 노션에서 데이터소스 ID 복사** — 표(데이터베이스)마다 이렇게:
+1. 데이터베이스 **옵션 버튼(`⋯`)** 클릭 → **데이터 소스 관리**
+2. **출처** 목록에서 원하는 데이터를 확인 → 그 항목 **우측 미트볼 메뉴(`⋯`)** 클릭
+3. **데이터 소스 ID 복사**
 
-```js
-// (임시) 노션 표의 data_source_id를 알려주는 도우미. 다 쓰면 삭제하세요.
-export default async function handler(req, res) {
-  const db = req.query.db;
-  if (!db) return res.status(400).send('주소 끝에 ?db=노션표의32자리ID 를 붙이세요');
-  const r = await fetch(`https://api.notion.com/v1/databases/${db}`, {
-    headers: {
-      Authorization: `Bearer ${process.env.NOTION_TOKEN}`,
-      'Notion-Version': '2026-03-11',
-    },
-  });
-  const data = await r.json();
-  if (!r.ok) return res.status(r.status).json(data);
-  res.status(200).json({
-    표제목: data.title?.[0]?.plain_text,
-    data_sources: (data.data_sources || []).map((s) => ({ 이름: s.name, data_source_id: s.id })),
-  });
-}
-```
+러닝 기록 표, 챌린저 표 **각각** 이렇게 복사해 두세요.
 
-커밋하면 Vercel이 **자동으로 다시 배포**합니다(1분 안팎).
+**4-2. Vercel에 넣기** — Vercel 프로젝트 → **Settings → Environment Variables**에 추가:
+- `NOTION_DS_RUNNING` → **러닝 기록 표**의 데이터소스 ID
+- `NOTION_DS_CHALLENGERS` → **챌린저 표**의 데이터소스 ID
 
-**4-2. 32자리 표 ID 알아내기** — 노션에서 표를 열고 주소(URL)를 봅니다. 주소 속 **32자리 영문·숫자 덩어리**가 표 ID입니다. 러닝 기록 표, 챌린저 표 각각 복사하세요.
+**4-3. 다시 배포** — Vercel **Deployments → 맨 위 항목의 `⋯` → Redeploy**로 새 환경변수를 반영합니다.
 
-**4-3. 브라우저로 도우미 호출** — 주소창에 이렇게 입력:
-```
-https://<내-주소>.vercel.app/api/find-ids?db=<러닝기록표의32자리ID>
-```
-화면에 `data_source_id`가 나옵니다 → 복사. 챌린저 표 ID로도 한 번 더 해서 그 값도 복사.
-
-> 🤖 막히면 AI Studio에 화면에 뜬 내용을 붙여넣고 *"여기서 data_source_id가 뭐야? 에러면 왜 그런지 알려줘"* 라고 물어보세요. (`unauthorized`/`object_not_found`가 뜨면 → STEP 0의 "표에 인테그레이션 초대"를 안 한 것)
-
-**4-4. Vercel에 ID 넣기** — Vercel 프로젝트 → **Settings → Environment Variables**:
-- `NOTION_DS_RUNNING` → 러닝 기록 표의 data_source_id
-- `NOTION_DS_CHALLENGERS` → 챌린저 표의 data_source_id
-
-**4-5. 도우미 삭제 + 재배포** — 깃허브에서 `api/find-ids.js`를 삭제(파일 → 휴지통 아이콘 → Commit). 그리고 Vercel **Deployments → 맨 위 항목 ⋯ → Redeploy**로 새 환경변수를 반영합니다.
+> 🤖 메뉴를 못 찾겠으면 AI Studio에 *"노션에서 데이터 소스 ID 복사하는 법 알려줘"* 라고 물어보세요. (참고로 (A) 코딩 에이전트 길에서는 이 ID도 에이전트가 자동으로 읽어옵니다.)
 
 ✅ **체크포인트**: 재배포 후 사이트를 열면 챌린저 목록이 노션에서 불러온 이름들로 채워집니다.
 
@@ -193,7 +168,7 @@ https://<내-주소>.vercel.app/api/find-ids?db=<러닝기록표의32자리ID>
 | 속도 | 빠름(요청→완성) | 느림(한 땀 한 땀) |
 | 설치 | 에이전트 설치 필요 | 편집기+브라우저면 끝 |
 | 명령어 | 에이전트가 대신 | 한 줄도 안 침(웹 클릭) |
-| 데이터소스 ID | 자동 | 도우미로 직접(STEP 4) |
+| 데이터소스 ID | 자동 | 노션에서 복사(STEP 4) |
 | 배우는 것 | "부탁하는 법" | "어디에 무엇이 들어가는지" |
 
 처음 한 번은 (B)로 한 땀 한 땀 해보면 구조가 손에 잡히고, 그다음부터는 (A)로 빠르게 — 이 순서를 추천합니다.
