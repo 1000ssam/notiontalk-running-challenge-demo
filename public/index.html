@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0a">
+
+  <!-- Favicons -->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <title>러닝 챌린지 인증</title>
+  <meta name="description" content="노션톡 러닝 챌린지 3기 — 14일 7회, 스크린샷 한 장으로 인증 끝.">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="노션톡 러닝 챌린지 3기">
+  <meta property="og:description" content="14일 7회, 달리고 · 인증하고 · 함께 — 스크린샷 한 장으로 노션에 자동 기록.">
+  <meta property="og:image" content="/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="ko_KR">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="노션톡 러닝 챌린지 3기">
+  <meta name="twitter:description" content="14일 7회, 달리고 · 인증하고 · 함께 — 스크린샷 한 장으로 노션에 자동 기록.">
+  <meta name="twitter:image" content="/og.png">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #1a1a1a;
+      --surface-hi: #242424;
+      --border: #2a2a2a;
+      --border-hi: #3a3a3a;
+      --text: #f5f5f5;
+      --text-muted: #8a8a8a;
+      --text-faint: #5a5a5a;
+      --accent: #D6FF00;
+      --accent-ink: #0a0a0a;
+      --danger: #ff5a5a;
+      --success: #4ade80;
+      --radius: 14px;
+      --radius-lg: 20px;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Pretendard Variable', 'Pretendard', sans-serif;
+      margin: 0;
+      padding: 24px 20px max(24px, env(safe-area-inset-bottom));
+      background: var(--bg);
+      color: var(--text);
+      max-width: 480px;
+      margin-inline: auto;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ── Header ─────────────────────────────────────── */
+    .header { margin-bottom: 28px; }
+    .header__title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header__icon {
+      width: 28px; height: 28px;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--accent);
+    }
+    .header__sub { color: var(--text-muted); font-size: 14px; margin: 0; }
+
+    /* ── Section labels ─────────────────────────────── */
+    .label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin: 24px 0 12px;
+    }
+
+    /* ── Challenger grid (picker view) ──────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+    .chip {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 4px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+      user-select: none;
+      position: relative;
+    }
+    .chip:active { transform: scale(0.97); }
+    .chip:focus-visible {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .chip__avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      line-height: 1;
+      background: var(--surface-hi);
+    }
+    .chip__name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ── Selected challenger card (upload view) ─────── */
+    .selected-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px 12px 12px;
+      margin-bottom: 24px;
+    }
+    .selected-card__avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .selected-card__name {
+      flex: 1;
+      min-width: 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .selected-card__change {
+      background: transparent;
+      border: 1px solid var(--border-hi);
+      color: var(--text-muted);
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.12s ease, color 0.12s ease;
+    }
+    .selected-card__change:active { background: var(--surface-hi); color: var(--text); }
+
+    /* ── Upload area ────────────────────────────────── */
+    .upload {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .upload__tile {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: border-color 0.12s ease, background 0.12s ease;
+    }
+    .upload__tile:active { background: var(--surface-hi); }
+    .upload__tile svg { width: 26px; height: 26px; color: var(--text); }
+    .upload__tile span { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+    .upload__input { display: none; }
+
+    .preview {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      aspect-ratio: 9/16;
+      max-height: 380px;
+      display: none;
+    }
+    .preview.is-active { display: block; }
+    .preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .preview__reset {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: rgba(0,0,0,0.6);
+      color: var(--text);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+
+    /* ── Submit button ──────────────────────────────── */
+    .submit {
+      width: 100%;
+      margin-top: 24px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      background: var(--accent);
+      color: var(--accent-ink);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: opacity 0.12s ease, transform 0.12s ease;
+      letter-spacing: -0.01em;
+    }
+    .submit:disabled {
+      background: var(--surface-hi);
+      color: var(--text-faint);
+      cursor: not-allowed;
+    }
+    .submit:not(:disabled):active { transform: scale(0.98); }
+
+    /* ── Status / result ────────────────────────────── */
+    .status {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      display: none;
+    }
+    .status.is-active { display: block; }
+    .status--loading { background: var(--surface); color: var(--text-muted); border: 1px solid var(--border); }
+    .status--error { background: rgba(255, 90, 90, 0.08); color: var(--danger); border: 1px solid rgba(255, 90, 90, 0.3); }
+
+    .result-card {
+      margin-top: 20px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px 20px;
+      display: none;
+    }
+    .result-card.is-active { display: block; }
+    .result-card__head {
+      display: flex; align-items: center; gap: 10px;
+      color: var(--accent);
+      font-size: 13px; font-weight: 700;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .result-card__head svg { width: 16px; height: 16px; }
+    .result-card__who {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 15px; font-weight: 600;
+      margin-bottom: 18px;
+      color: var(--text);
+    }
+    .result-card__who-emoji {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      background: var(--surface-hi);
+    }
+    .result-card__who-meta { color: var(--text-muted); font-weight: 500; font-size: 13px; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 16px 12px;
+      background: var(--bg);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+    }
+    .stat { text-align: center; }
+    .stat__value {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+      line-height: 1.1;
+    }
+    .stat__unit {
+      font-size: 11px;
+      color: var(--text-faint);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+    .stat__label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 8px;
+    }
+    .result-card__cta {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      background: transparent;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--border-hi);
+      border-radius: var(--radius);
+    }
+
+    /* ── Misc ───────────────────────────────────────── */
+    .skel-grid .chip {
+      background: var(--surface);
+      pointer-events: none;
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    .skel-grid .chip__avatar { background: var(--border); }
+    .skel-grid .chip__name { color: transparent; background: var(--border); border-radius: 4px; height: 12px; width: 60%; }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <section class="view" id="pickerView">
+    <header class="header">
+      <h1 class="header__title">
+        <span class="header__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 4v4l-2 2-2-1-3 4 2 3 5-2 3 3 1-3-3-3 4-3-2-3-3 1z"/>
+            <circle cx="17" cy="4" r="1.5"/>
+          </svg>
+        </span>
+        러닝 챌린지 인증
+      </h1>
+      <p class="header__sub">사진 한 장 올리면 노션에 자동 입력돼요.</p>
+    </header>
+
+    <div class="label">오늘 누가 달렸나요?</div>
+    <div class="grid skel-grid" id="grid" role="radiogroup" aria-label="챌린저 선택">
+      <div class="chip"><div class="chip__avatar"></div><div class="chip__name">··</div></div>
+      <div class="chip"><div class="chip__avatar"></div><div class="chip__name">··</div></div>
+      <div class="chip"><div class="chip__avatar"></div><div class="chip__name">··</div></div>
+      <div class="chip"><div class="chip__avatar"></div><div class="chip__name">··</div></div>
+      <div class="chip"><div class="chip__avatar"></div><div class="chip__name">··</div></div>
+      <div class="chip"><div class="chip__avatar"></div><div class="chip__name">··</div></div>
+      <div class="chip"><div class="chip__avatar"></div><div class="chip__name">··</div></div>
+      <div class="chip"><div class="chip__avatar"></div><div class="chip__name">··</div></div>
+      <div class="chip"><div class="chip__avatar"></div><div class="chip__name">··</div></div>
+      <div class="chip"><div class="chip__avatar"></div><div class="chip__name">··</div></div>
+    </div>
+  </section>
+
+  <section class="view" id="uploadView" hidden>
+    <div class="selected-card">
+      <div class="selected-card__avatar" id="selectedAvatar"></div>
+      <div class="selected-card__name" id="selectedName"></div>
+      <button type="button" class="selected-card__change" id="changeBtn">변경</button>
+    </div>
+
+    <form id="form" novalidate>
+      <div class="label">인증샷</div>
+      <div class="upload" id="uploadTiles">
+        <label class="upload__tile" for="cameraInput">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          <span>카메라</span>
+          <input id="cameraInput" class="upload__input" type="file" accept="image/*" capture="environment">
+        </label>
+        <label class="upload__tile" for="galleryInput">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="m21 15-5-5L5 21"/>
+          </svg>
+          <span>갤러리</span>
+          <input id="galleryInput" class="upload__input" type="file" accept="image/*">
+        </label>
+      </div>
+
+      <div class="preview" id="preview" aria-live="polite">
+        <img id="previewImg" alt="선택한 인증샷 미리보기">
+        <button type="button" class="preview__reset" id="previewReset">다시 고르기</button>
+      </div>
+
+      <button class="submit" type="submit" id="submit" disabled>노션에 기록</button>
+    </form>
+
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+    <div class="result-card" id="resultCard"></div>
+  </section>
+
+  <script>
+    const STORAGE_KEY = 'running-challenge-last-challenger';
+    const PALETTES = {
+      '1000쌤': 'linear-gradient(135deg, #FFB347 0%, #FF6B35 100%)',
+      '닝닝':   'linear-gradient(135deg, #FFC8DD 0%, #FFAFCC 100%)',
+      '윈터':   'linear-gradient(135deg, #6FA8DC 0%, #8E7CC3 100%)',
+      '지젤':   'linear-gradient(135deg, #FFE066 0%, #B5E61D 100%)',
+      '카리나': 'linear-gradient(135deg, #FF6FBF 0%, #4ECDC4 100%)',
+    };
+    const FALLBACK_PALETTE = 'linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%)';
+
+    const pickerView = document.getElementById('pickerView');
+    const uploadView = document.getElementById('uploadView');
+    const grid = document.getElementById('grid');
+    const selectedAvatar = document.getElementById('selectedAvatar');
+    const selectedName = document.getElementById('selectedName');
+    const changeBtn = document.getElementById('changeBtn');
+    const cameraInput = document.getElementById('cameraInput');
+    const galleryInput = document.getElementById('galleryInput');
+    const uploadTiles = document.getElementById('uploadTiles');
+    const preview = document.getElementById('preview');
+    const previewImg = document.getElementById('previewImg');
+    const previewReset = document.getElementById('previewReset');
+    const submitBtn = document.getElementById('submit');
+    const statusEl = document.getElementById('status');
+    const resultCard = document.getElementById('resultCard');
+    const form = document.getElementById('form');
+
+    let selectedChallenger = null;
+    let selectedChallengerName = null;
+    let selectedChallengerIcon = null;
+    let selectedFile = null;
+    let challengers = [];
+
+    // ── 뷰 전환 ─────────────────────────────────────
+    function showPicker() {
+      pickerView.hidden = false;
+      uploadView.hidden = true;
+    }
+    function showUpload() {
+      pickerView.hidden = true;
+      uploadView.hidden = false;
+      paintAvatar(selectedAvatar, { name: selectedChallengerName, icon: selectedChallengerIcon });
+      selectedName.textContent = selectedChallengerName || '';
+    }
+    changeBtn.addEventListener('click', () => {
+      // 캐시는 유지 — 사용자가 잘못 들어왔을 때 즉시 다른 챌린저로 바꿀 수 있게만
+      showPicker();
+    });
+
+    // 아바타 그리기 (chip / selected-card 공통)
+    function paintAvatar(el, c) {
+      el.style.background = PALETTES[c.name] || FALLBACK_PALETTE;
+      el.style.backgroundImage = '';
+      el.style.color = '';
+      el.style.fontWeight = '';
+      el.textContent = '';
+      if (c.icon?.type === 'emoji') {
+        el.textContent = c.icon.value;
+      } else if (c.icon?.type === 'image' && c.icon.value) {
+        el.style.backgroundImage = `url(${c.icon.value})`;
+        el.style.backgroundSize = 'cover';
+        el.style.backgroundPosition = 'center';
+      } else {
+        el.textContent = (c.name || '?').charAt(0);
+        el.style.color = '#fff';
+        el.style.fontWeight = '700';
+      }
+    }
+
+    // ── 챌린저 로딩 ─────────────────────────────────
+    async function loadChallengers() {
+      try {
+        const res = await fetch('/api/challengers');
+        const list = await res.json();
+        if (!Array.isArray(list)) throw new Error(list.error || '목록 로드 실패');
+        challengers = list;
+        renderGrid(list);
+
+        // 캐시 우선: 캐시된 ID가 현재 목록에 살아있으면 바로 업로드 뷰로
+        const lastId = localStorage.getItem(STORAGE_KEY);
+        const cached = lastId && list.find(c => c.id === lastId);
+        if (cached) {
+          selectedChallenger = cached.id;
+          selectedChallengerName = cached.name;
+          selectedChallengerIcon = cached.icon;
+          showUpload();
+          updateSubmit();
+        } else {
+          if (lastId) localStorage.removeItem(STORAGE_KEY);
+          showPicker();
+        }
+      } catch (err) {
+        grid.classList.remove('skel-grid');
+        grid.innerHTML = `<div style="grid-column: 1/-1; padding: 16px; color: var(--danger); font-size: 14px;">로드 실패: ${err.message}</div>`;
+      }
+    }
+
+    function renderGrid(list) {
+      grid.classList.remove('skel-grid');
+      grid.innerHTML = '';
+      for (const c of list) {
+        const chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.setAttribute('role', 'radio');
+        chip.setAttribute('tabindex', '0');
+        chip.dataset.id = c.id;
+        chip.dataset.name = c.name;
+
+        const avatar = document.createElement('div');
+        avatar.className = 'chip__avatar';
+        paintAvatar(avatar, c);
+
+        const name = document.createElement('div');
+        name.className = 'chip__name';
+        name.textContent = c.name;
+
+        chip.append(avatar, name);
+        chip.addEventListener('click', () => pickChallenger(c));
+        chip.addEventListener('keydown', (e) => {
+          if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); pickChallenger(c); }
+        });
+        grid.appendChild(chip);
+      }
+    }
+
+    // 칩 선택 = 즉시 캐시 + 업로드 뷰 전환
+    function pickChallenger(c) {
+      selectedChallenger = c.id;
+      selectedChallengerName = c.name;
+      selectedChallengerIcon = c.icon;
+      localStorage.setItem(STORAGE_KEY, c.id);
+      showUpload();
+      updateSubmit();
+    }
+
+    // ── 파일 선택/미리보기 ───────────────────────────
+    function handleFile(file) {
+      if (!file) return;
+      selectedFile = file;
+      const url = URL.createObjectURL(file);
+      previewImg.src = url;
+      preview.classList.add('is-active');
+      uploadTiles.style.display = 'none';
+      updateSubmit();
+    }
+    cameraInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+    galleryInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+    previewReset.addEventListener('click', () => {
+      selectedFile = null;
+      cameraInput.value = '';
+      galleryInput.value = '';
+      preview.classList.remove('is-active');
+      uploadTiles.style.display = '';
+      previewImg.src = '';
+      updateSubmit();
+    });
+
+    function updateSubmit() {
+      submitBtn.disabled = !(selectedChallenger && selectedFile);
+    }
+
+    // ── 결과 카드 헬퍼 ───────────────────────────────
+    function fmtDuration(sec) {
+      if (sec == null) return null;
+      const h = Math.floor(sec / 3600);
+      const m = Math.floor((sec % 3600) / 60);
+      const s = Math.floor(sec % 60);
+      const pad = (n) => String(n).padStart(2, '0');
+      return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
+    }
+    function fmtPace(sec) {
+      if (sec == null) return null;
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m}'${String(s).padStart(2, '0')}"`;
+    }
+    function fmtDate() {
+      const d = new Date();
+      return `${d.getMonth() + 1}월 ${d.getDate()}일`;
+    }
+
+    function renderResult({ extracted, notionUrl }) {
+      const d = extracted || {};
+      const distance = d.distance_km != null ? d.distance_km.toFixed(2) : '–';
+      const duration = fmtDuration(d.duration_seconds) || '–';
+      const pace = fmtPace(d.pace_per_km_seconds) || '–';
+
+      const emoji = selectedChallengerIcon?.type === 'emoji' ? selectedChallengerIcon.value : (selectedChallengerName?.charAt(0) || '?');
+
+      resultCard.innerHTML = `
+        <div class="result-card__head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          노션에 기록 완료
+        </div>
+        <div class="result-card__who">
+          <span class="result-card__who-emoji" style="background:${PALETTES[selectedChallengerName] || FALLBACK_PALETTE}">${emoji}</span>
+          <span>${selectedChallengerName}</span>
+          <span class="result-card__who-meta">· ${fmtDate()}</span>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat__value">${distance}</div>
+            <div class="stat__unit">km</div>
+            <div class="stat__label">거리</div>
+          </div>
+          <div class="stat">
+            <div class="stat__value">${duration}</div>
+            <div class="stat__unit">&nbsp;</div>
+            <div class="stat__label">시간</div>
+          </div>
+          <div class="stat">
+            <div class="stat__value">${pace}</div>
+            <div class="stat__unit">/km</div>
+            <div class="stat__label">페이스</div>
+          </div>
+        </div>
+        <a class="result-card__cta" href="${notionUrl}" target="_blank" rel="noopener">챌린지 대시보드 보기 →</a>
+      `;
+      resultCard.classList.add('is-active');
+    }
+
+    // ── 제출 ─────────────────────────────────────────
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!selectedChallenger || !selectedFile) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = '분석 중…';
+      resultCard.classList.remove('is-active');
+      statusEl.classList.remove('status--error');
+      statusEl.classList.add('status--loading', 'is-active');
+      statusEl.textContent = '사진 분석 중…';
+
+      try {
+        const fd = new FormData();
+        fd.append('challengerId', selectedChallenger);
+        fd.append('image', selectedFile);
+
+        // 노션 입력 단계로 시각적 전환 (실제 호출은 단일 요청)
+        setTimeout(() => {
+          if (statusEl.classList.contains('is-active')) statusEl.textContent = '노션에 기록 중…';
+        }, 1800);
+
+        const res = await fetch('/api/upload', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.error || '업로드 실패');
+
+        localStorage.setItem(STORAGE_KEY, selectedChallenger);
+        statusEl.classList.remove('is-active');
+        renderResult(data);
+
+        // 폼 리셋 (단, 챌린저 선택은 유지)
+        previewReset.click();
+        submitBtn.textContent = '한 번 더 기록';
+      } catch (err) {
+        statusEl.classList.remove('status--loading');
+        statusEl.classList.add('status--error');
+        statusEl.textContent = '문제가 생겼어요: ' + err.message;
+        submitBtn.textContent = '다시 시도';
+      } finally {
+        updateSubmit();
+        if (!submitBtn.disabled === false) submitBtn.disabled = !(selectedChallenger && selectedFile);
+      }
+    });
+
+    loadChallengers();
+  </script>
+</body>
+</html>

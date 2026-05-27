@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Running Challenge">
+  <rect width="64" height="64" rx="14" fill="#0B1A33"/>
+  <circle cx="42" cy="15" r="5.5" fill="#D6FF00"/>
+  <path d="M20 50 L30 38 L25 28 L40 24 L50 34" fill="none" stroke="#D6FF00" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M25 28 L18 18" fill="none" stroke="#D6FF00" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <g stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" opacity="0.95">
+    <path d="M6 44 H16"/>
+    <path d="M4 54 H12"/>
+  </g>
+</svg>

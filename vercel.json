@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/daily-morning",
+      "schedule": "0 23 * * *"
+    }
+  ],
+  "functions": {
+    "api/webhook/run-added.js": {
+      "maxDuration": 30
+    },
+    "api/cron/daily-morning.js": {
+      "maxDuration": 60
+    }
+  }
+}

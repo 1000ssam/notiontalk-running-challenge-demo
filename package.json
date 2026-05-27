@@ -1,0 +1,19 @@
+{
+  "name": "notiontalk-running-challenge-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod",
+    "build:og": "node scripts/build-og.mjs",
+    "build:favicons": "node scripts/build-favicons.mjs"
+  },
+  "dependencies": {
+    "busboy": "^1.6.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.59.1",
+    "sharp": "^0.34.5"
+  }
+}
