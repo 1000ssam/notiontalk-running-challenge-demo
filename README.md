@@ -12,7 +12,7 @@
 - **🤖 코딩 에이전트가 있다면** (클로드 코드·Cursor·Codex·Antigravity CLI 등)
   → **이 저장소를 에이전트에게 읽히고** *"`guide/AGENT-BUILD-GUIDE.md`대로 페이즈 0부터 만들자"* 라고 하세요.
 - **💬 브라우저 챗봇만 있다면** (ChatGPT·Claude·Gemini 등)
-  → [`guide/AGENT-BUILD-GUIDE.md`](./guide/AGENT-BUILD-GUIDE.md) **이 한 파일만 복사해 붙여넣고** *"페이즈 0 시작"* 이라고 하세요.
+  → [`guide/AGENT-BUILD-GUIDE.md`](./guide/AGENT-BUILD-GUIDE.md) **이 한 파일만 복사해 챗봇에 붙여넣으세요.** 붙여넣으면 챗봇이 바로 첫 단계(페이즈 0)부터 안내합니다.
 
 ---
 
